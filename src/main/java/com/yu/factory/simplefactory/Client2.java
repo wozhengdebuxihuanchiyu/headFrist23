@@ -1,4 +1,4 @@
-package com.yu.factory;
+package com.yu.factory.simplefactory;
 
 import com.yu.factory.simplefactory.IFood;
 import com.yu.factory.simplefactory.SimpleFactory;
