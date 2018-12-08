@@ -1,0 +1,41 @@
+代理模式
+    一个类的直接访问太过于麻烦(创建的开销太大、需要安全控制)，所以需要增加一个访问层。
+    RealObject————实际的类，也就是访问太过麻烦的类，需要被代理的类
+    实现步骤：
+        1.RealObject和ProxyObject都需要实现同一个接口，就是干同一个事
+        2.在ProxyObject类中调用RealObject类的方法
+
+
+JDK实现的动态代理
+    动态代理可以代理多个不同的接口，代理类和被代理类必须实现同一个接口。
+    1.需要有个代理的类去实现InvocationHandler,在类里定义一个需要被代理的对象，并使用构造器初始化它
+    2.比如HongKongMacBookStore代理USAMacBookStore,他们都实现了IMacBookStore,在HongKongMacBookStore使用
+         IMacBookStore iMacBookStore = (IMacBookStore) Proxy.newProxyInstance(HongKongMacBookStore.class.getClassLoader(),
+                        USAMacBookStore.class.getInterfaces(),
+                        new DynamicProxy(new USAMacBookStore()));
+          iMacBookStore.sell();
+      就实现了代理
+    3.以后使用
+        IMacBookStore iMacBookStore = new HongKongMacBookStore();
+        iMacBookStore.sell();
+        IKFC ikfc = new ChainKFC();
+        ikfc.eat();
+
+cglib实现动态代理
+    动态代理可以代理多个不同的接口，代理类继承被代理类。
+    1.需要有个代理类去实现MethodInterceptor接口，并实现intercept，在类里定义一个需要被代理的对象，并使用构造器初始化它。
+    2.代理类代码加上
+        public static Object getProxy(Object target) {
+                Enhancer enhancer = new Enhancer();
+                // 设置需要代理的对象
+                enhancer.setSuperclass(target.getClass());
+                // 设置代理人
+                enhancer.setCallback(new CglibDynamicProxy(target));
+                return enhancer.create();
+            }
+    3.在HongKongMacBookStore中使用
+        USAMacBookStore usaMacBookStore = (USAMacBookStore) CglibDynamicProxy.getProxy(new USAMacBookStore());
+        usaMacBookStore.sell();
+    4.以后使用
+        USAMacBookStore usaMacBookStore = new HongKongMacBookStore();
+        usaMacBookStore.sell();
