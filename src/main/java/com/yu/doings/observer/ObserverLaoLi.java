@@ -1,5 +1,6 @@
 package com.yu.doings.observer;
 
+
 /**
  * @author yuchangying
  * @date 2022-06-18 00:58:57
@@ -9,23 +10,26 @@ package com.yu.doings.observer;
  * 3、抽象观察者（Observer）角色：它是一个抽象类或接口，它包含了一个更新自己的抽象方法，当接到具体主题的更改通知时被调用。
  * 4、具体观察者（Concrete Observer）角色：实现抽象观察者中定义的抽象方法，以便在得到目标的更改通知时更新自身的状态。
  *
- * 此处为抽象主题，气象站
+ * 此处为具体观察者,老李
  */
-public interface WeatherSubject {
+public class ObserverLaoLi implements Observer {
     /**
-     * 观察者订阅该气象站
-     * @param observer 观察者
+     * 订阅的气象站
      */
-    void registerObserver(Observer observer);
+    WeatherStationSuject weatherStation;
 
     /**
-     * 观察者退订该气象站
-     * @param observer 观察者
+     * 初始化气象站
+     * @param weatherStation 气象站
      */
-    void removeObserver(Observer observer);
+    public ObserverLaoLi(WeatherStationSuject weatherStation){
+        this.weatherStation = weatherStation;
+    }
 
-    /**
-     * 气象站通知所有订阅的观察者
-     */
-    void notifyObserver();
+    @Override
+    public void update() {
+        if(weatherStation.getHumidity() > 20){
+            System.out.println("湿度大于20，老李打开了除湿器...");
+        }
+    }
 }
